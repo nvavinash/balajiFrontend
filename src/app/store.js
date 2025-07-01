@@ -8,7 +8,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 export const store = configureStore({
   reducer: {
-    // product: productReducer,
+    product: productReducer,
     // auth: authReducer,
     // cart: cartReducer,
     // order: orderReducer,
