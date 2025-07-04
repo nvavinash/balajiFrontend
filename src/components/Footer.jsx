@@ -18,7 +18,7 @@ const Footer = () => {
 
         <div>
           <p className="text-xl font-medium mb-5">Get In Touch</p>
-          <ul className=" py-2">
+          <ul>
             <li> Whatsapp +91 9029378333</li>
             <li>contact_balajicollection@gmail.com</li>
           </ul>
