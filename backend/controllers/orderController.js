@@ -202,6 +202,5 @@ const updateStatus = async (req, res) => {
         res.json({ success: false, message: error.message });
     }
 }
-}
 
 export { placeOrder, placeOrderRazorpay, verifyRazorpay, userOrders, allOrders, updateStatus };

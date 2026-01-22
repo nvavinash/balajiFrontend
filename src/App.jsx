@@ -15,6 +15,12 @@ import SearchBar from './components/SearchBar'
 import ProtectedRoute from './components/ProtectedRoute'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AdminLogin from './pages/AdminLogin'
+import AdminOrders from './pages/AdminOrders'
+import AdminInvoice from './pages/AdminInvoice'
+import AdminDashboard from './pages/AdminDashboard'
+import AdminProducts from './pages/AdminProducts'
+import AdminProtectedRoute from './components/AdminProtectedRoute'
 
 const App = () => {
 
@@ -24,6 +30,15 @@ const App = () => {
       <Navbar />
       <SearchBar />
 
+      {/* Admin Quick Links (Visible only on admin paths for clarity) */}
+      {window.location.pathname.startsWith('/admin') && window.location.pathname !== '/admin/login' && (
+        <div className='flex justify-center gap-6 py-4 border-b text-sm font-bold uppercase tracking-wider'>
+          <a href="/admin/dashboard" className='hover:text-black text-gray-500'>Dashboard</a>
+          <a href="/admin/products" className='hover:text-black text-gray-500'>Products</a>
+          <a href="/admin/orders" className='hover:text-black text-gray-500'>Orders</a>
+        </div>
+      )}
+
       <Routes>
         {/* Public routes */}
         <Route path='/' element={<Home />} />
@@ -32,8 +47,9 @@ const App = () => {
         <Route path='/contact' element={<Contact />} />
         <Route path='/product/:productId' element={<Product />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/admin/login' element={<AdminLogin />} />
 
-        {/* Protected routes - require authentication */}
+        {/* Protected user routes */}
         <Route
           path='/cart'
           element={
@@ -56,6 +72,40 @@ const App = () => {
             <ProtectedRoute>
               <Orders />
             </ProtectedRoute>
+          }
+        />
+
+        {/* Protected Admin routes */}
+        <Route
+          path='/admin/dashboard'
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboard />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path='/admin/orders'
+          element={
+            <AdminProtectedRoute>
+              <AdminOrders />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path='/admin/products'
+          element={
+            <AdminProtectedRoute>
+              <AdminProducts />
+            </AdminProtectedRoute>
+          }
+        />
+        <Route
+          path='/admin/invoice/:orderId'
+          element={
+            <AdminProtectedRoute>
+              <AdminInvoice />
+            </AdminProtectedRoute>
           }
         />
       </Routes>
