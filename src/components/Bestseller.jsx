@@ -11,6 +11,7 @@ const Bestseller = () => {
     if (!products?.length) return; // Ensure products exist before filtering 
     setBestSold(products.filter(item => item.bestseller).slice(0, 5));
   }, [products]);
+
   return (
     <div className="my-10">
       <div className="text-center text-3xl py-8">

@@ -130,7 +130,7 @@ const AdminProducts = () => {
                             <tr key={index} className="hover:bg-gray-50 transition-colors">
                                 <td className="px-6 py-4">
                                     <img
-                                        src={`${backendUrl}/uploads/${item.image[0]}`}
+                                        src={item.image[0]}
                                         onError={(e) => e.target.src = 'https://via.placeholder.com/50'}
                                         alt=""
                                         className="w-12 h-12 object-cover rounded border"

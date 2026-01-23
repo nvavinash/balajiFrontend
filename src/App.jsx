@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Home from "./pages/Home"
 import Collection from './pages/Collection'
 import About from './pages/About'
@@ -10,6 +10,7 @@ import Login from './pages/Login'
 import PlaceOrder from './pages/PlaceOrder'
 import Orders from './pages/Orders'
 import Navbar from './components/Navbar'
+import AdminNavbar from './components/AdminNavbar'
 import Footer from './components/Footer'
 import SearchBar from './components/SearchBar'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -23,21 +24,20 @@ import AdminProducts from './pages/AdminProducts'
 import AdminProtectedRoute from './components/AdminProtectedRoute'
 
 const App = () => {
+  // Get current location to determine if we're on admin routes
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin') && location.pathname !== '/admin/login';
+  const isAdminLogin = location.pathname === '/admin/login';
 
   return (
     <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
       <ToastContainer />
-      <Navbar />
-      <SearchBar />
 
-      {/* Admin Quick Links (Visible only on admin paths for clarity) */}
-      {window.location.pathname.startsWith('/admin') && window.location.pathname !== '/admin/login' && (
-        <div className='flex justify-center gap-6 py-4 border-b text-sm font-bold uppercase tracking-wider'>
-          <a href="/admin/dashboard" className='hover:text-black text-gray-500'>Dashboard</a>
-          <a href="/admin/products" className='hover:text-black text-gray-500'>Products</a>
-          <a href="/admin/orders" className='hover:text-black text-gray-500'>Orders</a>
-        </div>
-      )}
+      {/* Conditionally render Admin Navbar or User Navbar */}
+      {isAdminRoute ? <AdminNavbar /> : !isAdminLogin && <Navbar />}
+
+      {/* Hide SearchBar on admin routes */}
+      {!isAdminRoute && !isAdminLogin && <SearchBar />}
 
       <Routes>
         {/* Public routes */}
@@ -109,7 +109,9 @@ const App = () => {
           }
         />
       </Routes>
-      <Footer />
+
+      {/* Hide Footer on admin routes */}
+      {!isAdminRoute && !isAdminLogin && <Footer />}
     </div>
   )
 }

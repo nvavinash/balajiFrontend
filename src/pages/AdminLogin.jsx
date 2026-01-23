@@ -19,7 +19,7 @@ const AdminLogin = () => {
             if (response.data.success) {
                 localStorage.setItem('admin_token', response.data.token);
                 toast.success("Admin Login Successful");
-                navigate('/admin/dashboard');
+                navigate('/admin/orders');
             } else {
                 toast.error(response.data.message);
             }

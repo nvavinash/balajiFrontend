@@ -2,12 +2,25 @@ import React, { useState, useContext } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
 
   // Get context values
   const { setShowSearch, getCartCount, token, logout, navigate } = useContext(ShopContext);
+
+  const handleCartClick = () => {
+    if (getCartCount() === 0) {
+      toast.info("Your cart is empty. Please add products first.");
+      navigate("/");
+      return;
+    }
+    navigate("/cart");
+  };
+
+  const [open, setOpen] = useState(false);
+
 
   return (
     <div className="flex items-center justify-between p-5 font-medium">
@@ -45,8 +58,59 @@ const Navbar = () => {
           alt="search"
         />
 
+        <div className="relative block lg:hidden">
+
+          {/* Profile icon */}
+          <img
+            className="w-5 cursor-pointer"
+            src={assets.profile_icon}
+            alt="profile"
+            onClick={() => setOpen(!open)}
+          />
+
+          {/* Dropdown */}
+          {open && (
+            <div className="absolute right-0 mt-3 w-36 py-3 px-4 bg-slate-100 rounded shadow-lg text-gray-600 z-50">
+              {token ? (
+                <>
+                  <p
+                    onClick={() => {
+                      navigate("/orders");
+                      setOpen(false);
+                    }}
+                    className="cursor-pointer hover:text-black"
+                  >
+                    Orders
+                  </p>
+
+                  <p
+                    onClick={() => {
+                      logout();
+                      setOpen(false);
+                    }}
+                    className="cursor-pointer hover:text-black mt-2"
+                  >
+                    Logout
+                  </p>
+                </>
+              ) : (
+                <p
+                  onClick={() => {
+                    navigate("/login");
+                    setOpen(false);
+                  }}
+                  className="cursor-pointer hover:text-black"
+                >
+                  Login
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+
         {/* Profile dropdown */}
-        <div className="group relative">
+        <div className="group relative cursor-pointer hidden lg:block">
           <img
             className="w-5 cursor-pointer"
             src={assets.profile_icon}
@@ -83,12 +147,12 @@ const Navbar = () => {
         </div>
 
         {/* Cart icon with count */}
-        <Link to="/cart" className="relative">
+        <div onClick={handleCartClick} className="relative">
           <img src={assets.cart_icon} className="w-5 min-w-5" alt="cart" />
           <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center bg-orange-500 text-black aspect-square leading-4 rounded-full text-[8px]">
             {getCartCount()}
           </p>
-        </Link>
+        </div>
 
         {/* Mobile menu icon */}
         <img

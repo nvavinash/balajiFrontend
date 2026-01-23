@@ -1,6 +1,5 @@
-import { createContext, useEffect } from "react";
-import { products } from "../assets/assets";
-import { useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -22,14 +21,43 @@ const ShopContextProvider = (props) => {
   const navigate = useNavigate();
 
   // State management
+  const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
+  const [loading, setLoading] = useState(true);
 
   // Authentication state - persisted in localStorage
   const [token, setToken] = useState(
     localStorage.getItem('token') ? localStorage.getItem('token') : ""
   );
+
+  /**
+   * Fetch all products from backend API
+   * Stores result in products state
+   */
+  const getProductsData = async () => {
+    try {
+      const response = await axios.get(backendUrl + '/api/product/list');
+      if (response.data.success) {
+        setProducts(response.data.products);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Initial data fetch on component mount
+   */
+  useEffect(() => {
+    getProductsData();
+  }, []);
 
   /**
    * Sync token with localStorage whenever it changes
@@ -141,6 +169,8 @@ const ShopContextProvider = (props) => {
   const value = {
     // Product data
     products,
+    getProductsData, // Exposed for refreshing data (e.g. after admin updates)
+    loading,
 
     // Constants
     currency,
