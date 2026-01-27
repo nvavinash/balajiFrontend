@@ -185,6 +185,7 @@ const AdminProducts = () => {
                                                 setImages(newImages);
                                             }}
                                         />
+                                        <p className="text-[8px] text-gray-500">Height: 450px Width: 390px</p>
                                     </label>
                                 ))}
                             </div>
